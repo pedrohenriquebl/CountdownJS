@@ -12,6 +12,20 @@ const newYearTime = new Date(`Januay 01 ${nextYear} 00:00:00`);
 
 nextYearContainer.textContent = nextYear;
 
+const getTimeUnit = unit => unit < 10 ? '0' + unit : unit;
+
+const insertCountdownValues = ({days, hours, minutes, seconds }) => {
+    /* adicionando pelo dom dinamicamente a contagem */  
+
+    /* Na contagem regressiva, para que o 0 permaneça
+    aparecendo (09/08/07...), é preciso de uma condição ternária*/
+
+    secondsContainer.textContent = getTimeUnit(seconds);
+    minutesContainer.textContent = getTimeUnit(minutes);
+    hoursContainer.textContent = getTimeUnit(hours);
+    daysContainer.textContent = getTimeUnit(days);
+}
+
 const updateCountdown = () => {
     const currentTime = new Date();
     const difference = newYearTime - currentTime;
@@ -34,15 +48,8 @@ const updateCountdown = () => {
 
     const seconds = Math.floor(difference/1000) % 60;
 
-   /* adicionando pelo dom dinamicamente a contagem */  
-
-   /* Na contagem regressiva, para que o 0 permaneça
-   aparecendo (09/08/07...), é preciso de uma condição ternária*/
-
-   secondsContainer.textContent = seconds < 10 ? '0' + seconds : seconds;
-   minutesContainer.textContent = minutes < 10 ? '0' + minutes : minutes;
-   hoursContainer.textContent = hours < 10 ? '0' + hours : hours;
-   daysContainer.textContent = days < 10 ? '0' + days : days;
+    insertCountdownValues({days, hours, minutes, seconds });
+ 
 }
 
 /* Pelo elemento do dom acionamos o gif spinnerloading, porém adicionamos
@@ -50,10 +57,12 @@ o remove para que ele não fique aparecendo na tela o tempo todo.
 Além disso, adicionamos a classe flex ao display, para que as horas
 aparecam prontamente após o loading sumir*/
 
-setTimeout(() => {
+const handleCountdownDisplay = () => {
     spinnerLoading.remove();
     countdownContainer.style.display = 'flex';
-}, 1000)
+}
+
+setTimeout(handleCountdownDisplay, 1000)
 
 /* A função setInterval recebe 2 parâmetros, o primeiro argumento será a função que 
 será executada, o segundo é o intervalo de tempo em que a função será chamada,
